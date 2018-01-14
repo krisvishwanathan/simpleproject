@@ -1,0 +1,11 @@
+---  
+
+- name: custom role
+  include_role:
+    name: nginx
+  when: "'webservers' in group_names"
+
+- name: custom role
+  include_role:
+    name: mongodb
+  when: "'db' in group_names"

@@ -1,0 +1,61 @@
+---
+- hosts: managementsrv
+  name: Management server configuration
+  become: true
+  gather_facts: true
+  tasks:
+  - name: Install python 
+    raw: test -e /usr/bin/python || (sudo apt -y update && sudo apt install -y python-minimal)   
+  vars_files:
+  - ./projvars.yml
+  - ./prerequisite.yml
+  - ./provisionvars.yml
+  roles:
+  - { role: tools, when: 'tools'}
+  - { role: prerequisites, when: 'prerequisites'}
+  - { role: provision, when: 'provision'}
+  - { role: redis, when: 'sensu_server'}
+  - { role: sensu, when: 'sensu_server'}
+  - { role: uchiwa, when: 'sensu_server'}
+  - { role: influxdb, when: 'sensu_server'}
+  - { role: ansible-elk, when: 'elk_server'}
+
+- hosts: webservers
+  name: Nodes configuration
+  vars_files:
+  - ./projvars.yml
+  - ./prerequisite.yml
+  - ./provisionvars.yml
+  - ./{{ cloud }}.yml
+  user: "{{ cluster.ssh_user }}"
+
+  ignore_errors: true
+  become: true
+  gather_facts: true
+  roles:
+  - { role: tools}
+  - { role: sensu-client, when: 'sensu_client'}
+  - { role: prerequisites}
+  - { role: provision}  
+  tasks:
+  - name: Run the plays
+    include: "{{proj}}.yml"
+
+- hosts: db
+  name: Nodes configuration
+  vars_files:
+  - ./projvars.yml
+  - ./prerequisite.yml
+  - ./provisionvars.yml
+  - ./{{ cloud }}.yml
+  user: "{{ cluster.ssh_user }}"
+  become: true
+  gather_facts: true
+  roles:
+  - { role: tools}
+  - { role: sensu-client, when: 'sensu_client'}
+  - { role: prerequisites}
+  - { role: provision}  
+  tasks:
+  - name: Run the plays
+    include: "{{proj}}.yml"

@@ -1,0 +1,19 @@
+#[managementsrv]
+#management # ansible_host=127.0.0.1
+
+#[managementsrv:vars]
+#ssh-key-pub=id_rsa
+
+[allnodes]
+ks-master ansible_ssh_private_key_file=/home/vagrant/icloudnow/icloudnow-backend/workspace/project1/keyfiles/id_rsa
+ks-node1 ansible_ssh_private_key_file=/home/vagrant/icloudnow/icloudnow-backend/workspace/project1/keyfiles/id_rsa
+
+#[webservers:vars]
+#ssh-key-pub=id_rsa
+
+[db]
+#database 
+
+#[db:vars]
+#ssh-key-pub=keyfiles/id_rsa
+#db-name=xyz
