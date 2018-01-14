@@ -6,7 +6,7 @@ auth: {
 
   # if Authenticating with Azure using Active Directory 
   username: "icloudnow@seemsysyahoo.onmicrosoft.com",  # this corresponds to ad_user ansible variable
-  password: "Cloud2018",
+  password: "xxxxx",
   #password: "{{ password | default(lookup('env', 'AZURE_PASSWORD')) }}", #ad_pwd
    
   #if Authenitcating using Azure Service Principal
